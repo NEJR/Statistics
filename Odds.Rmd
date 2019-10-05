@@ -1,0 +1,42 @@
+### Odds ratios
+Note: For those with a programming background, R indexes vectors starting from 1.
+
+As discussed earlier today, odds ratios are very commonly used to communicate relative effect sizes for binary outcomes, particularly in observational data. Calculation is straightforward, but often misunderstood. We start with a 2 x 2 table. Below is the 2 x 2 table for in hospital mortality and having an arterial line. I’ve assigned it to a new variable called egtab.
+
+```{R}
+egtab <- table(dat2$aline_flg,dat2$hosp_exp_flg,dnn=c("Aline","Hosp. Mort"))
+egtab
+```
+
+It’s hard to interpret the raw counts, so we’ll use prop.table to compute the proportions who died and lived by row (margin 1, aline).
+
+```{R}pegtab <- prop.table(egtab,1)
+pegtab
+```
+Odds are 
+p
+1−p
+
+p1−p
+where 
+p
+p
+is the proportion with the outcome (death) in a group of patients, which is in the second column. We can index the above table by column (tab[,idx] will retrieve column idx from the table [or matrix] tab) to compute the odds in each group.
+```{R}
+Oddsegtab <-pegtab[,2]/pegtab[,1]
+Oddsegtab
+```
+Now we have the odds of the outcome in those who got an aline 1 and those who didn’t 0. We need to pick a reference group. We’ll calculate it both ways, but let’s assume we want those without an aline to be the reference:
+
+```{R}
+Oddsegtab[2]/Oddsegtab[1]
+```
+If we wanted those with an aline to be the reference group:
+```{R}
+Oddsegtab[1]/Oddsegtab[2]
+```
+
+If we wanted to plot this information, and include a confidence interval, we can use the plot_OR_by_level from the MIMICbook package:
+```{R}
+plot_OR_by_level(dat2,"aline_flg","hosp_exp_flg")
+```
