@@ -1,10 +1,34 @@
-## Load
-
+###Install & Load
+```{r}
+install.packages("tableone")
 library(tableone)
+```
 
-library(tableone)
+### Quick sample
+```{r}
 CreateTableOne(vars=c("age","service_unit","aline_flg","day_28_flg"),data=dat2)
+```
 
+To make suitable table style
+```{r}
+ if(!("dplyr" %in% installed.packages()[,1])) {
+ install.packages("dplyr")
+ }
+library(dplyr)
+CreateTableOne(vars=c("age","service_unit","aline_flg","day_28_flg"),strata="aline_flg",data=dat2,test=FALSE) %>% print(
+  printToggle      = FALSE,
+  showAllLevels    = TRUE,
+  cramVars         = "kon"
+) %>% 
+{data.frame(
+  variable_name             = gsub(" ", "&nbsp;", rownames(.), fixed = TRUE), ., 
+  row.names        = NULL, 
+  check.names      = FALSE, 
+  stringsAsFactors = FALSE)} %>% 
+knitr::kable()
+```
+
+### Tutorial
 ## Load Mayo Clinic Primary Biliary Cirrhosis Data 
 library(survival) 
 data(pbc) 
@@ -33,6 +57,21 @@ print(catTableOverall, showAllLevels = TRUE)
 ## The table can be stratified by one or more variables catTableBySexTrt <- CreateCatTable(vars = catVars, strata = c("sex","trt"), data = pbc)
 ## print now includes p-values which are by default calculated by chisq.test. ## It is formatted at the decimal place specified by the pDigits argument ## (3 by default). It is formatted like <0.001 if very small. catTableBySexTrt
 ## The exact argument toggles the p-values to the exact test result from ## fisher.test. It will show which ones are from exact tests. print(catTableBySexTrt, exact = "ascites")
-## summary now includes both types of p-values summary(catTableBySexTrt)
-## If your work flow includes copying to Excel and Word when writing manuscripts, ## you may benefit from the quote argument. This will quote everything so that ## Excel does not mess up the cells. print(catTableBySexTrt, exact = "ascites", quote = TRUE)
-## If you want to center-align values in Word, use noSpaces option. print(catTableBySexTrt, exact = "ascites", quote = TRUE, noSpaces = TRUE)
+
+summary now includes both types of p-values 
+```{r}
+summary(catTableBySexTrt)
+```
+
+If your work flow includes copying to Excel and Word when writing manuscripts, 
+you may benefit from the quote argument. This will quote everything so that 
+Excel does not mess up the cells. 
+```{r}
+print(catTableBySexTrt, exact = "ascites", quote = TRUE)
+```
+
+If you want to center-align values in Word, use noSpaces option. 
+```{r}
+print(catTableBySexTrt, exact = "ascites", quote = TRUE, noSpaces = TRUE)
+```
+
