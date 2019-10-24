@@ -1,27 +1,53 @@
+
 ## Finalfit
+
 help you quickly create elegant final results tables and plots when modelling in R. 
+
 These can easily be exported as Word documents, PDFs, or html files.
 
+
+
 ### Install
+
 ```{r}
+
 install.packages("finalfit")
+
 install.packages("dplyr")
+
 ```
+
 It is recommended that this package is used together with dplyr which can be installed via:
 
+
+
 Documentation
+
 The package documentation is maintained independently at finalfit.org.
+
 Examples
+
 See getting started and the All tables vignettes for extensive examples.
+
 Crosstable / table 1
+
 ### Crosstable 
+
 ```{r}
+library(dplyr)
+library(finalfit)
 explanatory = c("age.factor", "sex.factor", "obstruct.factor")
+
 dependent = 'mort_5yr'
+
 colon_s %>%
+
   summary_factorlist(dependent, explanatory, 
+
   p=TRUE, add_dependent_label=TRUE) -> t2
+
 knitr::kable(t2, row.names=FALSE, align=c("l", "l", "r", "r", "r"))
+
 ```
 ### Regression table
 ```{r}
